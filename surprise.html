@@ -3,155 +3,345 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Happy Friendship Day! 💖</title>
+  <title>Happy Friendship Day! 💙</title>
+  <!-- Google Fonts for Clean Typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Sacramento&display=swap" rel="stylesheet">
+  <!-- Canvas Confetti Library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-    body {
-      background: #0d0d12;
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-      position: relative;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
-    .sticker {
-      position: absolute;
-      width: 45px;
-      height: 45px;
-      pointer-events: none;
-    }
-    .st-1 { top: 5%; left: 5%; }
-    .st-2 { top: 5%; right: 5%; }
-    .st-3 { bottom: 5%; left: 5%; }
-    .st-4 { bottom: 5%; right: 5%; }
 
-    .card {
-      background: #18181e;
-      border: 1px solid #3d3b4e;
-      border-radius: 20px;
-      padding: 25px 20px;
-      width: 100%;
-      max-width: 380px;
-      text-align: center;
-      position: relative;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #030712, #0b192c, #1e3a8a);
+      color: #f8fafc;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 60px;
     }
-    .music-btn {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 50%;
-      width: 36px;
-      height: 36px;
-      color: #fff;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-    .photo-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+
+    /* Fixed Audio Controller Floating Button */
+    .audio-control {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50px;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
       gap: 10px;
-      margin: 15px 0;
+      cursor: pointer;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s ease;
     }
-    .photo-grid img {
+    .audio-control:hover {
+      transform: scale(1.05);
+    }
+    .music-icon {
+      font-size: 1.2rem;
+      animation: spin 3s linear infinite paused;
+    }
+    .playing .music-icon {
+      animation-play-state: running;
+    }
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Header / Hero Section */
+    .hero {
+      text-align: center;
+      padding: 80px 20px 40px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .hero h1 {
+      font-family: 'Sacramento', cursive;
+      font-size: 3.8rem;
+      color: #60a5fa;
+      margin-bottom: 10px;
+      text-shadow: 0 0 20px rgba(96, 165, 250, 0.4);
+    }
+    .hero p {
+      font-size: 1.2rem;
+      color: #93c5fd;
+      line-height: 1.6;
+    }
+
+    /* Common Section Styles */
+    section {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      margin-bottom: 30px;
+      position: relative;
+    }
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 4px;
+      background: #2563eb;
+      margin: 10px auto 0;
+      border-radius: 2px;
+    }
+
+    /* Photo Gallery */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .photo-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+    .photo-card:hover {
+      transform: translateY(-8px);
+      border-color: #3b82f6;
+    }
+    .photo-card img {
       width: 100%;
-      height: 110px;
+      height: 220px;
       object-fit: cover;
-      border-radius: 10px;
-      border: 1px solid #3d3b4e;
     }
-    .name {
-      color: #a29bfe;
-      font-size: 1.6rem;
-      margin-bottom: 12px;
+    .photo-card p {
+      padding: 12px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #cbd5e1;
     }
-    .message {
-      background: #121216;
-      padding: 15px;
-      border-radius: 12px;
-      border-left: 3px solid #a29bfe;
-      text-align: left;
-      font-size: 0.9rem;
-      color: #ddd;
-      line-height: 1.5;
+
+    /* Feature Grid / Memory Cards */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .info-card {
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 24px;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+    .info-card:hover {
+      transform: translateY(-5px);
+      border-color: #60a5fa;
+    }
+    .info-card h3 {
+      color: #93c5fd;
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .info-card p {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Interactive Secret Message Section */
+    .interactive-section {
+      text-align: center;
+      background: rgba(37, 99, 235, 0.15);
+      border: 1px dashed rgba(96, 165, 250, 0.4);
+      border-radius: 20px;
+      padding: 30px;
+      margin-top: 50px;
+    }
+    .btn-action {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+      transition: all 0.3s ease;
+      margin-top: 15px;
+    }
+    .btn-action:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    }
+
+    /* Hidden Note Popup Style */
+    #secretNote {
+      display: none;
+      margin-top: 20px;
+      font-size: 1.1rem;
+      color: #bfdbfe;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Navigation Footer */
+    .footer-nav {
+      text-align: center;
+      margin-top: 60px;
     }
     .back-btn {
-      display: inline-block;
-      margin-top: 15px;
-      color: #aaa;
+      color: #94a3b8;
       text-decoration: none;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
+      transition: color 0.3s ease;
+    }
+    .back-btn:hover {
+      color: #60a5fa;
     }
   </style>
 </head>
 <body>
 
-  <!-- Floating GIFs/Stickers -->
-  <img src="https://media.giphy.com/media/26fldmqsA5edc55e0/giphy.gif" class="sticker st-1" alt="sparkle">
-  <img src="https://media.giphy.com/media/l41YfykEffZ7QM55m/giphy.gif" class="sticker st-2" alt="heart">
-  <img src="https://media.giphy.com/media/xT0xezQGU5xCDJuCPe/giphy.gif" class="sticker st-3" alt="star">
-  <img src="https://media.giphy.com/media/3o7TKoWXm3okO1kgHC/giphy.gif" class="sticker st-4" alt="flower">
+  <!-- Floating Music Toggle -->
+  <div class="audio-control" id="musicBtn" onclick="toggleAudio()">
+    <span class="music-icon">🎵</span>
+    <span id="musicText">Play "Yaariyan"</span>
+  </div>
 
-  <!-- Background Music -->
-<audio id="bgMusic" loop>
-  <source src="Yaariyaan.mp3" type="audio/mpeg">
-</audio>
+  <!-- Audio Element linked to your file -->
+  <audio id="bgMusic" loop>
+    <source src="Yaariyaan.mp3" type="audio/mpeg">
+  </audio>
 
+  <!-- Hero Banner Section -->
+  <header class="hero">
+    <h1>Happy Friendship Day, <span id="friendName">Friend</span>! ✨</h1>
+    <p>A small space on the web made just for you, celebrating every moment, laugh, and memory we share.</p>
+  </header>
 
-  <div class="card">
-    <button class="music-btn" onclick="toggleMusic()" id="mBtn">🎵</button>
-
-    <div class="photo-grid">
-      <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=500&q=80" alt="Photo 1">
-      <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=500&q=80" alt="Photo 2">
+  <!-- Photo Gallery Grid -->
+  <section>
+    <h2 class="section-title">Captured Moments</h2>
+    <div class="gallery-grid">
+      <div class="photo-card">
+        <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=500&auto=format&fit=crop" alt="Memory 1">
+        <p>Unforgettable Laughs ✨</p>
+      </div>
+      <div class="photo-card">
+        <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=500&auto=format&fit=crop" alt="Memory 2">
+        <p>Good Times & Great Friends 🌟</p>
+      </div>
+      <div class="photo-card">
+        <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=500&auto=format&fit=crop" alt="Memory 3">
+        <p>To More Adventures 🚀</p>
+      </div>
     </div>
+  </section>
 
-    <h1>Happy Friendship Day!</h1>
-    <h2 class="name" id="friendName">Friend</h2>
-
-    <div class="message">
-      <p>Thank you for being such an incredible friend! Wishing you endless joy, success, and continuous smiles always! 🌟💖</p>
+  <!-- Special Cards Grid -->
+  <section>
+    <h2 class="section-title">Why You're Awesome</h2>
+    <div class="card-grid">
+      <div class="info-card">
+        <h3><span>⚡</span> Always Supportive</h3>
+        <p>No matter the situation, you always bring positivity and great energy. Truly one of a kind.</p>
+      </div>
+      <div class="info-card">
+        <h3><span>🌟</span> The Best Vibes</h3>
+        <p>Every conversation with you feels smooth, fun, and genuine. Never a dull moment!</p>
+      </div>
+      <div class="info-card">
+        <h3><span>🎶</span> Great Taste in Everything</h3>
+        <p>From music to memories, having you around just makes everything ten times better.</p>
+      </div>
     </div>
+  </section>
 
-    <a href="index.html" class="back-btn">← Back to start</a>
+  <!-- Interactive Secret Message Section -->
+  <section class="interactive-section">
+    <h2>Tap For A Surprise ✨</h2>
+    <p style="color: #93c5fd; margin-top: 8px;">Click the button below to unleash some celebration magic!</p>
+    <button class="btn-action" onclick="triggerCelebration()">Celebrate Now 🎉</button>
+    
+    <div id="secretNote">
+      <p><i>"Tumse bhi zyada hongi ab yaadein pyaariyan..."</i></p>
+      <p style="font-size: 0.95rem; margin-top: 8px; color: #cbd5e1;">Here's to making countless more memories together!</p>
+    </div>
+  </section>
+
+  <!-- Footer Navigation -->
+  <div class="footer-nav">
+    <a href="index.html" class="back-btn">← Back to Start</a>
   </div>
 
   <script>
-    // Extract the name from the URL query string
+    // 1. Extract Friend's Name from URL
     const urlParams = new URLSearchParams(window.location.search);
-    const passedName = urlParams.get('name');
-    if (passedName) {
-      document.getElementById('friendName').innerText = passedName + " ✨";
+    const name = urlParams.get('name');
+    if (name) {
+      document.getElementById('friendName').textContent = name;
     }
 
-    // Audio Control
-    const audio = document.getElementById("bgMusic");
-    let isPlaying = false;
+    // 2. Music Player Handler
+    const audio = document.getElementById('bgMusic');
+    const musicBtn = document.getElementById('musicBtn');
+    const musicText = document.getElementById('musicText');
 
-    function toggleMusic() {
-      const btn = document.getElementById("mBtn");
-      if (isPlaying) {
-        audio.pause();
-        btn.innerText = "🔇";
-        isPlaying = false;
+    function toggleAudio() {
+      if (audio.paused) {
+        audio.play().then(() => {
+          musicBtn.classList.add('playing');
+          musicText.textContent = 'Pause Music';
+        }).catch(err => {
+          console.log("Playback error: ", err);
+        });
       } else {
-        audio.play();
-        btn.innerText = "🎵";
-        isPlaying = true;
+        audio.pause();
+        musicBtn.classList.remove('playing');
+        musicText.textContent = 'Play "Yaariyan"';
       }
     }
 
-    // Trigger Confetti on Load
-    window.onload = () => {
-      confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-    };
-  </script>
+    // 3. Confetti and Secret Note Trigger
+    function triggerCelebration() {
+      // Trigger Confetti Explosion (Blue & Silver palette)
+      confetti({
+        particleCount: 120,
+        spread: 80,
+        origin: { y: 0.6 },
+        colors: ['#2563eb', '#60a5fa', '#93c5fd', '#ffffff', '#e2e8f0']
+      });
 
+      // Show secret message note
+      const secretNote = document.getElementById('secretNote');
+      secretNote.style.display = 'block';
+
+      // Auto play music on celebration tap if not already playing
+      if (audio.paused) {
+        toggleAudio();
+      }
+    }
+  </script>
 </body>
 </html>
